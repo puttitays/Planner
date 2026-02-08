@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Test from "./test"
-
+import RandomQuote from "./Quote"
 
 export default function App (){
     const[text,setText]=useState("");
@@ -31,10 +31,15 @@ export default function App (){
 
         },[items])
 
-return (<div><h1>To do list</h1>
+return (<div className="app">
+<div className="quote">
+    <RandomQuote />
+</div>
+  <div className="todo">
 
-
+    <h1>To do list</h1>
 <div className="d-flex gap-2">
+
 <input value={text} type="text" className= "form-control w-60" onChange={(e)=>setText(e.target.value)}
 onKeyDown={(e)=>{
     if (e.key === "Enter"){handleAdd()
@@ -55,9 +60,11 @@ onKeyDown={(e)=>{
         </li>
 
    ))}</ul>
-<Test />
+
 
 </div>
+</div>
+
 )
 }
 
