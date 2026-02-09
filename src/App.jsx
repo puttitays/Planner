@@ -79,7 +79,7 @@ onKeyDown={(e)=>{
  <label key={i} className="form-check-label" > {item}
 
         </label>
-        <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
+        <button  className= "btn btn-link ms-auto" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
 
  </div>
    ))}
@@ -92,7 +92,6 @@ onKeyDown={(e)=>{
  <label key={i} className="form-check-label text-success" > {cp_item}
 
         </label>
-        <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
 
  </div>
    ))}
