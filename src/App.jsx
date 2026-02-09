@@ -12,6 +12,12 @@ export default function App (){
         return saved ? JSON.parse(saved) :[]
         })
 
+    const[cp_items,setcpItems]=useState(()=>{
+        const saved=localStorage.getItem("completed")
+        return saved ? JSON.parse(saved) :[]
+        })
+
+
     function handleAdd(){
 
         const trimmed=text.trim();
@@ -31,6 +37,19 @@ export default function App (){
 
         },[items])
 
+
+    function completetask(complete_index){
+        const complete_task=items.find((item,index)=>index == complete_index )
+
+
+        const cp_array=JSON.parse(localStorage.getItem("completed"))
+        cp_array.push(complete_task)
+        localStorage.setItem("completed",JSON.stringify(cp_array));
+        setcpItems(cp_array)
+       deleteTask(complete_index)
+   }
+
+
 return (<div className="app">
 <div className="quote">
     <RandomQuote />
@@ -38,9 +57,9 @@ return (<div className="app">
   <div className="todo">
 
     <h1>To do list</h1>
-<div className="d-flex gap-2">
+<div className=" gap-2">
 
-<input value={text} type="text" className= "form-control w-60" onChange={(e)=>setText(e.target.value)}
+<input value={text} type="text" className= "form-control d-inline-block w-75 " onChange={(e)=>setText(e.target.value)}
 onKeyDown={(e)=>{
     if (e.key === "Enter"){handleAdd()
         }
@@ -50,17 +69,33 @@ onKeyDown={(e)=>{
 
 />
 
-<button onClick={handleAdd} className="btn btn-dark w-40" ><i className="bi bi-flower2 "></i> </button>
+<button onClick={handleAdd} className= "btn btn-link"><i className="bi bi-flower1 text-dark fs-3"></i> </button>
 </div>
-<ul>
+
     {items.map((item,i)=>(
-    <li key={i}>{item}
-        <button onClick={()=>deleteTask(i)}>Delete</button>
+        <div className="form-check d-flex align-items-center  gap-2 p-3" >
 
-        </li>
+        <input onClick={()=>completetask(i)}className="form-check-input" type="checkbox"/>
+ <label key={i} className="form-check-label" > {item}
 
-   ))}</ul>
+        </label>
+        <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
 
+ </div>
+   ))}
+
+
+
+    {cp_items.map((cp_item,i)=>(
+        <div className="form-check d-flex align-items-center  gap-2 p-3" >
+
+ <label key={i} className="form-check-label text-success" > {cp_item}
+
+        </label>
+        <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
+
+ </div>
+   ))}
 
 </div>
 </div>
