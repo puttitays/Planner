@@ -6,11 +6,14 @@ import Test from "./test"
 import RandomQuote from "./Quote"
 
 export default function App (){
+
     const[text,setText]=useState("");
     const[items,setItems]=useState(()=>{
         const saved=localStorage.getItem("tasks")
         return saved ? JSON.parse(saved) :[]
         })
+
+    const[checkid,setcheckid]=useState(null)
 
     const[cp_items,setcpItems]=useState(()=>{
         const saved=localStorage.getItem("completed")
@@ -42,13 +45,38 @@ export default function App (){
         const complete_task=items.find((item,index)=>index == complete_index )
 
 
-        const cp_array=JSON.parse(localStorage.getItem("completed"))
+        const cp_array=JSON.parse(localStorage.getItem("completed"))||[]
         cp_array.push(complete_task)
         localStorage.setItem("completed",JSON.stringify(cp_array));
         setcpItems(cp_array)
        deleteTask(complete_index)
    }
 
+
+
+useEffect(()=>{
+    const migratetask=JSON.parse(localStorage.getItem("tasks"))
+
+    migratetask.forEach(task=>{
+        fetch("http://127.0.0.1:8000/api/dailytask/",{
+            method:"post",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+            title: task,
+            completed: false
+            })
+        })
+
+
+        })
+
+
+
+
+
+
+
+},[])
 
 return (<div className="app">
 <div className="quote">
@@ -73,13 +101,13 @@ onKeyDown={(e)=>{
 </div>
 
     {items.map((item,i)=>(
-        <div className="form-check d-flex align-items-center  gap-2 p-3" >
+        <div className="form-check d-flex justify-content-start align-items-center  gap-2 p-3" >
 
-        <input onClick={()=>completetask(i)}className="form-check-input" type="checkbox"/>
+        <input checked={false} onChange={()=>{setcheckid(i);completetask(i);setCheckedIndex(null)}} className="form-check-input" type="checkbox" style={{ borderRadius: "50%"  ,accentColor: "black"}} />
  <label key={i} className="form-check-label" > {item}
 
         </label>
-        <button  className= "btn btn-link ms-auto" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
+        <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
 
  </div>
    ))}

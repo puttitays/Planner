@@ -12,12 +12,16 @@ fetch("http://127.0.0.1:8000/api/quote/")
 
 
         },[])
-    useEffect(()=>{
+
+
+useEffect(()=>{
 
    const quote_index=Math.floor(Math.random()*(quotes.length))
   setQuoteindex(quote_index)
 
         },[quotes])
+
+
 
 
 
