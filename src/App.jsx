@@ -6,7 +6,7 @@ import Test from "./test"
 import RandomQuote from "./Quote"
 
 export default function App (){
-
+// localStorage.clear()
     const[text,setText]=useState("");
     const[items,setItems]=useState(()=>{
         const saved=localStorage.getItem("tasks")
@@ -15,18 +15,26 @@ export default function App (){
 
     const[checkid,setcheckid]=useState(null)
 
-    const[cp_items,setcpItems]=useState(()=>{
-        const saved=localStorage.getItem("completed")
-        return saved ? JSON.parse(saved) :[]
-        })
-
 
     function handleAdd(){
 
         const trimmed=text.trim();
         if(!trimmed) return
-        setItems((prev)=>[...prev,trimmed])
+        setItems((prev)=>[...prev,{title:trimmed}])
         setText("")
+
+        fetch("http://127.0.0.1:8000/api/dailytask/",{
+            method:"post",
+            headers: { "Content-Type": "application/json" },
+            body:JSON.stringify({
+            title:    trimmed,
+            status:"on progress"
+
+
+
+                })
+
+            })
 
         }
 
@@ -41,34 +49,51 @@ export default function App (){
         },[items])
 
 
-    function completetask(complete_index){
-        const complete_task=items.find((item,index)=>index == complete_index )
-
-
-        const cp_array=JSON.parse(localStorage.getItem("completed"))||[]
-        cp_array.push(complete_task)
-        localStorage.setItem("completed",JSON.stringify(cp_array));
-        setcpItems(cp_array)
-       deleteTask(complete_index)
-   }
+    function completetask(taskTitle){
 
 
 
-useEffect(()=>{
-    const migratetask=JSON.parse(localStorage.getItem("tasks"))
 
-    migratetask.forEach(task=>{
+
+
         fetch("http://127.0.0.1:8000/api/dailytask/",{
             method:"post",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-            title: task,
-            completed: false
+            body:JSON.stringify({
+            title:    taskTitle,
+            status:"complete"
+
+
+
+                })
+
             })
-        })
+        .then(res=>{
+
+           const data=res.json()
+           console.log(res.status)
+           console.log(data)
+
+            })
+
+        }
 
 
-        })
+// useEffect(()=>{
+//     const migratetask=JSON.parse(localStorage.getItem("tasks"))
+//
+//     migratetask.forEach(task=>{
+//         fetch("http://127.0.0.1:8000/api/dailytask/",{
+//             method:"post",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify({
+//             title: task,
+//             completed: false
+//             })
+//         })
+//
+//
+//         })
 
 
 
@@ -76,7 +101,7 @@ useEffect(()=>{
 
 
 
-},[])
+// },[])
 
 return (<div className="app">
 <div className="quote">
@@ -103,8 +128,8 @@ onKeyDown={(e)=>{
     {items.map((item,i)=>(
         <div className="form-check d-flex justify-content-start align-items-center  gap-2 p-3" >
 
-        <input checked={false} onChange={()=>{setcheckid(i);completetask(i);setCheckedIndex(null)}} className="form-check-input" type="checkbox" style={{ borderRadius: "50%"  ,accentColor: "black"}} />
- <label key={i} className="form-check-label" > {item}
+        <input checked={false} onChange={()=>{setcheckid(i) ; completetask(item.title);setCheckedIndex(null)}} className="form-check-input" type="checkbox" style={{ borderRadius: "50%"  ,accentColor: "black"}} />
+ <label key={i} className="form-check-label" > {item.title}
 
         </label>
         <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
@@ -114,20 +139,23 @@ onKeyDown={(e)=>{
 
 
 
-    {cp_items.map((cp_item,i)=>(
-        <div className="form-check d-flex align-items-center  gap-2 p-3" >
+{/*     {items.map((item,i)=>( */}
+{/*         <div className="form-check d-flex align-items-center  gap-2 p-3" > */}
 
- <label key={i} className="form-check-label text-success" > {cp_item}
+{/*  <label key={i} className="form-check-label text-success" > {item.title} */}
 
-        </label>
+{/*         </label> */}
 
- </div>
-   ))}
-
+{/*  </div> */}
+{/*    ))} */}
+<Test />
 </div>
 </div>
 
 )
+
 }
+
+
 
 

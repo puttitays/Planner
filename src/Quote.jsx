@@ -13,18 +13,12 @@ fetch("http://127.0.0.1:8000/api/quote/")
 
         },[])
 
-
 useEffect(()=>{
 
    const quote_index=Math.floor(Math.random()*(quotes.length))
   setQuoteindex(quote_index)
 
         },[quotes])
-
-
-
-
-
 
 
 
@@ -35,11 +29,6 @@ useEffect(()=>{
 return(<div className="quote"><p >{quotes[quoteIndex].Quote}</p>
 
     <p style={{ marginLeft: "auto" }}>   ― {quotes[quoteIndex].Author}</p>
-
-
-
-
-
 
     </div>)
 

@@ -4,52 +4,42 @@ import { useState,useEffect } from 'react'
 
 export default function Test(){
 
-const[texts,setTexts]=useState("")
-const[tasks,setTasks]=useState(
-
-    JSON.parse(localStorage.getItem("task"))||[]
+    const [input,setinput]=useState("")
+const [task,settask]=useState([])
 
 
+function addtask(){
 
-    )
-function clickAdd(){
-    const newtask=[...tasks,texts]
-    setTasks(newtask)
-    localStorage.setItem("task",JSON.stringify(newtask))
+settask(input)
+    fetch("http://127.0.0.1:8000/api/dailytask/",{
+        method:"POST",
+         headers: {
+    "Content-Type": "application/json",
+  },
+   body: JSON.stringify({
+
+       title:input,
+       status:"on progress"
+
+       })
+
+
+
+        })
+
 
 
     }
 
+    return(<div>
+      <input value={input} type="text" onChange={(e)=>setinput(e.target.value)}/>
+<button onClick={addtask}>add</button>
 
-function delete_task(indextosdelete){
-    const new_task=tasks.filter((task,index)=>index !== indextosdelete)
-    setTasks(new_task)
-    localStorage.setItem("task",JSON.stringify(new_task))
-    }
-
-return  (
-<div><h1>To do List</h1>
-<input value={texts} type="text" onChange={(e)=>setTexts(e.target.value)} onKeyDown={(e)=>{if (e.key=="Enter"){clickAdd()}}} />
-<p>Current text:{texts} </p>
-<button onClick={clickAdd}>add</button>
-
-<ul>
-    {tasks.map((task,i)=>(
-
-        <li>{task}
-<button onClick={()=>delete_task(i)}>delete</button>
-
-
-</li>
-       ) )}
-
-    </ul>
-
-
+    <p>test</p>
+    <p>{task}</p>
     </div>
-
-    )
-
+)
 
     }
+
 
