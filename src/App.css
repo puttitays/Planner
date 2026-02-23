@@ -87,3 +87,12 @@ flex-direction: column;
 color:#FF9999
 
 }
+
+.tasklist{
+
+display:flex;
+gap:10px;
+alignItems: center;
+padding:10px
+
+}

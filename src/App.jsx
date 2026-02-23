@@ -5,151 +5,103 @@ import './App.css'
 import Test from "./test"
 import RandomQuote from "./Quote"
 
+import Calendar from "./calendar"
+
 export default function App (){
 // localStorage.clear()
-    const[text,setText]=useState("");
-    const[items,setItems]=useState(()=>{
-        const saved=localStorage.getItem("tasks")
-        return saved ? JSON.parse(saved) :[]
-        })
+ const [input,setInput]=useState("")
+ const [tasks,setTasks]=useState([])
 
-    const[checkid,setcheckid]=useState(null)
+ function addtask(){
+   fetch('http://127.0.0.1:8000/api/dailytask/',{
+       method:'POST',
+         headers: {
+        "Content-Type": "application/json", },
+       body:JSON.stringify({title:input,
+           status:"on progress"}
 
-
-    function handleAdd(){
-
-        const trimmed=text.trim();
-        if(!trimmed) return
-        setItems((prev)=>[...prev,{title:trimmed}])
-        setText("")
-
-        fetch("http://127.0.0.1:8000/api/dailytask/",{
-            method:"post",
-            headers: { "Content-Type": "application/json" },
-            body:JSON.stringify({
-            title:    trimmed,
-            status:"on progress"
+           )
 
 
+       })
 
-                })
+  .then(res => res.json())
+  .then(data=>setTasks(prev=>[...prev,data]))
 
-            })
+}
 
-        }
+  useEffect(()=>{
+fetch('http://127.0.0.1:8000/api/dailytask/')
 
-    function deleteTask(indextoDelete){
-        const newItems=items.filter((item,index)=>index !== indextoDelete )
-        setItems(newItems)
-        }
-    useEffect(()=>{
-        localStorage.setItem("tasks",JSON.stringify(items));
-
-
-        },[items])
-
-
-    function completetask(taskTitle){
+.then(res=>res.json())
+.then(data=>{setTasks(data)
+    console.log(data)})
 
 
 
 
 
+      },[])
+function complete_task(id){
 
-        fetch("http://127.0.0.1:8000/api/dailytask/",{
-            method:"post",
-            headers: { "Content-Type": "application/json" },
-            body:JSON.stringify({
-            title:    taskTitle,
-            status:"complete"
+    fetch(`http://127.0.0.1:8000/api/dailytask/${id}/`,{
 
+               method:'PATCH',
+         headers: {
+        "Content-Type": "application/json", },
+       body:JSON.stringify({
+           status:"completed"}
 
-
-                })
-
-            })
-        .then(res=>{
-
-           const data=res.json()
-           console.log(res.status)
-           console.log(data)
-
-            })
-
-        }
+           )
 
 
-// useEffect(()=>{
-//     const migratetask=JSON.parse(localStorage.getItem("tasks"))
-//
-//     migratetask.forEach(task=>{
-//         fetch("http://127.0.0.1:8000/api/dailytask/",{
-//             method:"post",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({
-//             title: task,
-//             completed: false
-//             })
-//         })
-//
-//
-//         })
+       })
+  .then(res=>res.json())
+  .then(data=>setTasks(
+        prev=>prev.map(task=> task.id==id ? {...task,status:"completed"}:task)
+
+      ))
 
 
 
 
+    }
 
 
+return (
 
-// },[])
+<div className="app">
+    <div className="quote">
+        <RandomQuote />
+    </div>
+    <div className="todo">
 
-return (<div className="app">
-<div className="quote">
-    <RandomQuote />
-</div>
-  <div className="todo">
+        <h1>To do list</h1>
+        <div className=" gap-2">
 
-    <h1>To do list</h1>
-<div className=" gap-2">
+            <input value={input} type="text" className= "form-control d-inline-block w-75 " onChange={(e)=>setInput(e.target.value)}
+                onKeyDown={(e)=>{if (e.key === "Enter"){addtask()} }}/>
+            <button onClick={addtask} className= "btn btn-link"><i className="bi bi-flower1 text-dark fs-3"></i> </button>
+        </div>
 
-<input value={text} type="text" className= "form-control d-inline-block w-75 " onChange={(e)=>setText(e.target.value)}
-onKeyDown={(e)=>{
-    if (e.key === "Enter"){handleAdd()
-        }
-    }}
+{/*     #todolist */}
 
+<br/>
+{tasks.map((task)=>{
+if(task.status=="on progress"){return <div key={task.id} className="tasklist"> <input type="checkbox" style={{margin: 0,borderRadius: "80%"}} onChange={()=>complete_task(task.id)} /><p style={{margin:0}}>{task.title}</p> </div>}
 
+else if (task.status=="completed"){return <div className="tasklist" ><input type="checkbox" checked={true} readOnly style={{accentColor:"green"}}/><p style={{margin:0,color:"green"}} >{task.title}</p></div>}
 
-/>
-
-<button onClick={handleAdd} className= "btn btn-link"><i className="bi bi-flower1 text-dark fs-3"></i> </button>
-</div>
-
-    {items.map((item,i)=>(
-        <div className="form-check d-flex justify-content-start align-items-center  gap-2 p-3" >
-
-        <input checked={false} onChange={()=>{setcheckid(i) ; completetask(item.title);setCheckedIndex(null)}} className="form-check-input" type="checkbox" style={{ borderRadius: "50%"  ,accentColor: "black"}} />
- <label key={i} className="form-check-label" > {item.title}
-
-        </label>
-        <button  className= "btn btn-link" onClick={()=>deleteTask(i)}><i class="bi bi-dash-lg text-pink"></i></button>
-
- </div>
-   ))}
+    }
 
 
+    )}
 
-{/*     {items.map((item,i)=>( */}
-{/*         <div className="form-check d-flex align-items-center  gap-2 p-3" > */}
+    </div>
 
-{/*  <label key={i} className="form-check-label text-success" > {item.title} */}
 
-{/*         </label> */}
+<Calendar />
 
-{/*  </div> */}
-{/*    ))} */}
-<Test />
-</div>
 </div>
 
 )
