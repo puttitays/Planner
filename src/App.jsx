@@ -100,7 +100,7 @@ else if (task.status=="completed"){return <div className="tasklist" ><input type
     </div>
 
 
-<Calendar />
+<Calendar tasks={tasks}/>
 
 </div>
 

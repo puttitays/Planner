@@ -1,7 +1,7 @@
 import { useState,useEffect } from 'react'
 
-export default function Calendar(){
-const [task,setTasks]=useState([])
+export default function Calendar({tasks}){
+
 
 
 function getdailytask(){
@@ -44,7 +44,15 @@ return(
     {day_th.map((k)=>(<td key={k}>
         <div>
         <p>{k+(7*(i))}</p>
-        {k+(7*(i))==23 ? task.map((item)=>(<p>{item.title}</p>)):''}
+{console.log(new Date(tasks[4]?.task_date).getDate())}
+        {tasks.map((item)=>(
+new Date(item.task_date).getDate()== k+(7*i) ?
+           <p>{item.title}</p>:""
+
+            ))
+
+            }
+
         </div>
 
 
