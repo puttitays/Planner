@@ -1,6 +1,6 @@
 
 import { useState,useEffect } from 'react'
-
+import RandomQuote from "./Quote"
 
 export default function Test(){
 

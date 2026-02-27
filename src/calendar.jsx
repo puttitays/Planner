@@ -1,6 +1,7 @@
 import { useState,useEffect } from 'react'
-
-export default function Calendar({tasks}){
+import './calendar.css'
+import { Link } from "react-router-dom";
+export default function Calendar({ tasks, setTasks }){
 
 
 
@@ -24,12 +25,12 @@ const day_th=[1,2,3,4,5,6,7]
 
 
 return(
-    <div>
+    <div style={{display:"flex",flexDirection: "column"}}>
 
 
 
-<table>
-  <tr>
+<table className="calendar">
+  <tr >
     <th>Monday</th>
     <th>Tuesday</th>
     <th>Wednesday</th>
@@ -41,13 +42,13 @@ return(
 
 { week_th.map((i)=>(
     <tr key={i}>
-    {day_th.map((k)=>(<td key={k}>
+    {day_th.map((k)=>(<td key={k} style={{backgroundColor:k+(7*i)==new Date().getDate()?"#f8e1fa":"white"}}>
         <div>
-        <p>{k+(7*(i))}</p>
+        <p style={{textAlign:"right"}}>{k+(7*(i))}</p>
 {console.log(new Date(tasks[4]?.task_date).getDate())}
         {tasks.map((item)=>(
 new Date(item.task_date).getDate()== k+(7*i) ?
-           <p>{item.title}</p>:""
+           <p style={{fontSize:"10px",margin:0,textAlign:"left",color:item.status=="completed"?"green":"red"}}>{item.title}</p>:""
 
             ))
 

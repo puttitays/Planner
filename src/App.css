@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,200..800;1,200..800&family=Kumbh+Sans:wght,YOPQ@100..900,300&family=Lexend+Giga:wght@100..900&display=swap');
 
 #root {
-  max-width: 1280px;
+width:100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
 }
 
 .logo {
@@ -53,7 +54,7 @@
   font-family:"Atkinson Hyperlegible Mono", sans-serif
 }
 
-h1,p,li,button,label{
+* {
 font-family:"Atkinson Hyperlegible Mono", sans-serif
 }
 
@@ -70,6 +71,8 @@ font-family:"Atkinson Hyperlegible Mono", sans-serif
   min-height: 80vh;
  display: flex;
 flex-direction: column;
+
+
 }
 
 .todo{
@@ -94,5 +97,33 @@ display:flex;
 gap:10px;
 alignItems: center;
 padding:10px
+
+}
+
+.Navbar {
+display:flex;
+margin:15px;
+border-radius:10px;
+justify-content: flex-start;
+border :1px solid black;
+width :45%;
+background-color:pink
+
+}
+
+.Navbar button{
+ background-color: pink;
+
+
+}
+
+.Monthly_goal {
+border :1px solid black;
+display:flex;
+flex-direction: column;
+border-radius:10px;
+justify-content:center;
+width: 400px;
+margin: 0 auto;
 
 }

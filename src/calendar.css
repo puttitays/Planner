@@ -1,0 +1,16 @@
+.calendar {
+width:100%;
+ border-collapse: collapse;
+ border: 1px solid black;
+ table-layout: fixed;
+
+}
+
+
+
+.calendar th,.calendar tr,.calendar td{
+ border: 1px solid black;
+
+vertical-align: top;
+
+}
